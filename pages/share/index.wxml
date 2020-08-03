@@ -1,0 +1,38 @@
+<!-- bindtouchstart="touchstart" bindtouchmove="touchmove" bindtouchend="touchend" -->
+<view class="container">
+  <view class="share_box" style="display:">
+    <view class="share_box__bd">
+      <view class="date">
+        <text class="date__num">{{songInfo.dateNum}}</text>
+      </view>
+
+      <view class="cover">
+        <view class="cover__media">
+          <image class="cover__img" src="{{songInfo.albumImg}}"></image>
+        </view>
+        <image class="cover__disk" src="../image/disk.png"></image>
+      </view>
+
+      <text class="song_name">{{songInfo.songName}}</text>
+      <text class="singer_name">{{songInfo.singerName}}</text>
+      <text class="song_desc">{{songInfo.desc}}</text>
+
+      <view class="user_info">
+        <image class="user_info__avatar" src="{{userInfo.avatarUrl}}"></image>
+        <text class="user_info__name">{{userInfo.nickName}}</text>
+        <image class="qrcode" src="../image/qrcode.png"></image>
+      </view>
+
+    </view>
+    <view class="share_box__opt">
+      <image class="download" bindtap="downloadImage" src="../image/icon_download.png"></image>
+
+      <button class="btn_share" open-type="share"><image class="share" src="../image/icon_share.png"></image></button>
+    </view>
+  </view>
+</view>
+
+
+<view class="shareCanvas">
+  <canvas style="width:600px; height:960px;" class="shareCanvas" canvas-id="js_shareCanvas"></canvas>
+</view>

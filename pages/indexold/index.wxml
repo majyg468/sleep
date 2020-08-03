@@ -1,0 +1,7 @@
+<!--index.wxml-->
+<button lang="zh_CN" bindgetuserinfo="getUserInfo" open-type="getUserInfo" class="poster_btn">
+  <view class="loading" style="display:">
+  <image class="loading__icon" src="../image/logo.jpg"></image>
+  <text class="loading__txt">眠眠</text>
+</view>
+</button>

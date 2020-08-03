@@ -1,13 +1,99 @@
-<!--index.wxml-->
-<view class="container">
-  <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
+<!-- bindtouchstart="touchstart" bindtouchmove="touchmove" bindtouchend="touchend" -->
+<button lang="zh_CN" bindgetuserinfo="getUserInfo" open-type="getUserInfo" class="poster_btn">
+  <view class="loading" wx:if="{{isLoaded==0}}">
+    <image class="loading__icon" src="../image/logo.jpg"></image>
+    <text class="loading__btn">START</text>
   </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
+
+</button>
+
+<view class="container" wx:if="{{isLoaded==1}}">
+  <swiper class="swiper" vertical="true" current="0" bindchange="changeIndex">
+    <swiper-item class="swiper__item" wx:for="{{songList}}">
+      <view class="date">
+        <text class="date__num">{{item.dateNum}}</text>
+      </view>
+
+      <view class="adaptive">
+        <view class="cover">
+          <view class="cover__media" bindtap="playsong">
+            <image class="cover__img" src="{{item.albumImg}}"></image>
+            <view class="cover__play">
+              <image class="icon_play" src="../image/icon_play.png"  wx:if="{{!playState&&!isLoading}}"></image>
+              <image class="icon_pause" src="../image/icon_pause.png" wx:if="{{playState&&!isLoading}}"></image>
+              <view class="cover_loading" wx:if="{{isLoading==1}}">
+                <view class="cover_loading__item"></view>
+                <view class="cover_loading__item"></view>
+                <view class="cover_loading__item"></view>
+              </view>
+            </view>
+          </view>
+          <image class="cover__disk" src="../image/disk.png"></image>
+        </view>
+      </view>
+
+      <text class="song_name">{{item.songName}}</text>
+      <text class="singer_name">{{item.singerName}}</text>
+      <text class="song_desc">{{item.desc}}  </text>
+    </swiper-item>
+  </swiper>
+
+  <view class="border"></view>
+  <view class="opt">
+    <!-- <button lang="zh_CN" bindgetuserinfo="getUserInfoEdit" open-type="getUserInfo"> -->
+
+    <view class="edit" bindtap='go_edit'>
+      <image class="edit__icon" wx:if="{{editvalue==''}}" src="../image/icon_edit.png"></image>
+      <text class="edit__txt">{{editvalue || '睡前碎碎念'}}</text>
+
+    </view>
+    <!-- </button> -->
+
+
+
+    <image class="clock" bindtap="set_clock" wx:if="{{minute==0}}" src="../image/icon_clock.png" style='display:'></image>
+    <view class="countdown" bindtap="set_clock" wx:if="{{minute>0}}">{{countTime}}</view>
+    <!-- <button lang="zh_CN" bindgetuserinfo="getUserInfo" open-type="getUserInfo" class="poster_btn"> -->
+
+    <image class="share" bindtap='goShare' src="../image/icon_share.png"></image>
+    <!-- </button> -->
+  </view>
+  <!-- 拉起:actionsheet--up -->
+  <view class="actionsheet {{clockAction?'actionsheet--up':''}}" bindtap="set_clock" catchtouchmove='defaultTouch' catchtouchend='defaultTouch' data-type="1">
+    <view class="actionsheet__box">
+      <view class="actionsheet__hd">
+        <text class="actionsheet__tit">设置定时关闭</text>
+      </view>
+      <view class="actionsheet__bd">
+        <view class="timing">
+          <picker-view class="timing_picker" indicator-class="timing_picker--current" bindchange="bindPickerChange" value="minute">
+            <picker-view-column>
+              <view class="timing_picker__item" wx:for="{{minutes}}" style="line-height: 100rpx; font-size: 36rpx;">{{item.desc}}</view>
+            </picker-view-column>
+          </picker-view>
+
+        </view>
+      </view>
+      <view class="actionsheet__ft">
+        <view class="actionsheet__btn" catchtap="set_clock_confirm">确定</view>
+      </view>
+    </view>
+    <view class="actionsheet__mask"></view>
+  </view>
+
+  <!-- 睡前碎碎念 拉起:actionsheet--up -->
+  <view class="actionsheet {{editAction?'actionsheet--up':''}}" bindtap="go_edit" catchtouchmove='defaultTouch' data-type="2">
+    <view class="actionsheet__box">
+      <view class="actionsheet__hd">
+        <text class="actionsheet__tit">睡前碎碎念</text>
+      </view>
+      <view class="actionsheet__bd">
+
+        <view class="add_notes">
+          <textarea class="add_notes__textarea" catchtap='focus_input' placeholder="写一写你今日的心情" placeholder-class="placeholder" maxlength="300" value="{{editvalue}}" bindinput='bindTextAreaInput' bindconfirm="set_edit_confirm"/>
+        </view>
+      </view>
+    </view>
+    <view class="actionsheet__mask"></view>
   </view>
 </view>
